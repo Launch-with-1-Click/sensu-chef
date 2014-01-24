@@ -1,0 +1,40 @@
+---
+driver_plugin: ec2
+driver_config:
+  require_chef_omnibus: true
+  aws_access_key_id: <%= ENV['LW1_ACCESS_KEY']  %>
+  aws_secret_access_key: <%= ENV['LW1_ACCESS_SECRET']  %>
+  aws_ssh_key_id: <%= ENV['LW1_SSH_KEY_ID']  %>
+  ssh_key: <%= ENV['LW1_SSH_KEY_PATH']  %>
+
+platforms:
+- name: ubuntu12-large-us-east
+  driver_config:
+    username: ubuntu
+    flavor_id: m1.large
+    image_id: ami-a73264ce # Ubuntu12.04 aki: aki-88aa75e1
+    region: us-east-1
+    availability_zone: us-east-1b
+    security_group_ids: sensu
+    tags:
+      Name: sensu-kitchen-large
+
+suites:
+- name: default
+  run_list:
+    - recipe[sensu-test]
+  sudo: true
+  attributes:
+    sensu:
+      dashboard:
+        port: 8080
+        password: default_password
+- name: runit
+  run_list:
+    - recipe[sensu-test::runit]
+  sudo: true
+  attributes:
+    sensu:
+      dashboard:
+        port: 8080
+        password: default_password

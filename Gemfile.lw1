@@ -1,0 +1,2 @@
+gem 'kitchen-ec2', :git => 'https://github.com/test-kitchen/kitchen-ec2.git'
+gem 'unf'
